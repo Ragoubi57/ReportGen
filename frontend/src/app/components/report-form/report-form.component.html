@@ -1,0 +1,172 @@
+<div class="report-form-container">
+  <header class="form-header">
+    <h2>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="form-title-icon">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.436 60.436 0 00-.491 6.347A48.627 48.627 0 0112 20.904a48.627 48.627 0 018.232-4.41 60.46 60.46 0 00-.491-6.347m-15.482 0a50.57 50.57 0 00-2.658-.813A59.905 59.905 0 0112 3.493a59.902 59.902 0 0110.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.697 50.697 0 0112 13.489a50.702 50.702 0 017.74-3.342M6.75 15a.75.75 0 100-1.5.75.75 0 000 1.5zm0 0v-3.675A55.378 55.378 0 0112 8.443m-7.007 11.55A5.981 5.981 0 006.75 15.75v-1.5" />
+      </svg>
+      Create Your AI-Powered Report
+    </h2>
+    <p>Fill in the details below and let ReportGen craft your document!</p>
+  </header>
+
+  <form [formGroup]="reportForm" (ngSubmit)="onSubmit()" novalidate>
+    <section class="form-section" @fadeInOut>
+      <h3>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="section-icon-svg"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>
+        Report Core Details
+      </h3>
+      <div>
+        <label for="title">Report Title <span class="required-asterisk">*</span></label>
+        <input id="title" type="text" formControlName="title" placeholder="e.g., Advancements in Quantum Computing">
+        <div *ngIf="reportForm.get('title')?.invalid && (reportForm.get('title')?.touched || reportForm.get('title')?.dirty)" class="field-error-message" @fadeInOut>
+          <span *ngIf="reportForm.get('title')?.errors?.['required']">Title is required.</span>
+          <span *ngIf="reportForm.get('title')?.errors?.['minlength']">Title must be at least 5 characters.</span>
+        </div>
+      </div>
+      <div>
+        <label for="query">Report Topic/Description (The AI Prompt) <span class="required-asterisk">*</span></label>
+        <textarea id="query" formControlName="query" rows="5" placeholder="e.g., A detailed analysis of the impact of AI on the healthcare industry..."></textarea>
+        <div *ngIf="reportForm.get('query')?.invalid && (reportForm.get('query')?.touched || reportForm.get('query')?.dirty)" class="field-error-message" @fadeInOut>
+          <span *ngIf="reportForm.get('query')?.errors?.['required']">Topic/Description is required.</span>
+          <span *ngIf="reportForm.get('query')?.errors?.['minlength']">Description must be at least 20 characters.</span>
+        </div>
+      </div>
+
+      <div class="user-figure-upload-section">
+        <label for="user-figure-upload-trigger" class="file-upload-label-styled">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="btn-icon"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 012.012 1.244l.256.512a2.25 2.25 0 002.013 1.244h3.218a2.25 2.25 0 002.013-1.244l.256-.512a2.25 2.25 0 012.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 00-2.12-1.58H6.88a2.25 2.25 0 00-2.12 1.58L2.35 13.177a2.25 2.25 0 00-.1.661z" /></svg>
+          {{ selectedUserFigureFile?.name || 'Upload a Figure for Report (Optional)' }}
+          <input id="user-figure-upload-trigger" type="file" (change)="onUserFigureSelected($event)" accept="image/png, image/jpeg, image/jpg" class="visually-hidden">
+        </label>
+        <button *ngIf="selectedUserFigureFile" type="button" (click)="clearUserFigureFile()" class="clear-file-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="btn-icon"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+            Clear Figure
+        </button>
+        <div *ngIf="userFigurePreview" class="image-preview-container">
+          <img [src]="userFigurePreview" alt="User figure preview" class="image-preview">
+        </div>
+        <div *ngIf="selectedUserFigureFile">
+          <label for="userFigureCaption">Figure Caption (Optional)</label>
+          <input id="userFigureCaption" type="text" formControlName="userFigureCaption" placeholder="e.g., System architecture diagram">
+        </div>
+      </div>
+    </section>
+
+    <section class="form-section" @fadeInOut>
+      <h3>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="section-icon-svg">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+        </svg>
+        Authorship & Affiliation
+      </h3>
+      <div formArrayName="authors" class="form-array-container">
+        <div class="form-array-header">
+          <label>Authors <span class="required-asterisk">*</span></label>
+          <button type="button" (click)="addAuthor()" class="add-btn array-add-btn" title="Add Author">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="btn-icon"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+            Add Author
+          </button>
+        </div>
+        <div *ngFor="let authorGroup of authors.controls; let i=index" [formGroupName]="i" class="array-item" @formArrayItem>
+          <input type="text" formControlName="name" placeholder="Author {{i + 1}} Full Name">
+          <button type="button" (click)="removeAuthor(i)" *ngIf="authors.length > 1" class="remove-btn array-remove-btn" title="Remove Author">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="btn-icon"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" /></svg>
+          </button>
+          <div *ngIf="getControl('authors', i, 'name')?.invalid && (getControl('authors', i, 'name')?.touched || getControl('authors', i, 'name')?.dirty)" class="field-error-message array-item-error" @fadeInOut>
+            Author name is required.
+          </div>
+        </div>
+      </div>
+
+      <div formArrayName="mentors" class="form-array-container">
+        <div class="form-array-header">
+          <label>Mentors (Optional)</label>
+          <button type="button" (click)="addMentor()" class="add-btn array-add-btn" title="Add Mentor">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="btn-icon"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+            Add Mentor
+          </button>
+        </div>
+        <div *ngFor="let mentorGroup of mentors.controls; let i=index" [formGroupName]="i" class="array-item" @formArrayItem>
+            <input type="text" formControlName="name" placeholder="Mentor {{i + 1}} Full Name">
+            <button type="button" (click)="removeMentor(i)" *ngIf="mentors.length > 0" class="remove-btn array-remove-btn" title="Remove Mentor">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="btn-icon"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" /></svg>
+            </button>
+        </div>
+      </div>
+
+      <div> <label for="date">Report Date</label> <input id="date" type="text" formControlName="date" placeholder="e.g., October 2024"> </div>
+      <div> <label for="university">University/Organization</label> <input id="university" type="text" formControlName="university" placeholder="e.g., Institute of Advanced Studies"> </div>
+    </section>
+
+    <section class="form-section" @fadeInOut>
+      <h3>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="section-icon-svg"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.158 0a.079.079 0 01.079.079v.008a.079.079 0 01-.079.079h-.008a.079.079 0 01-.079-.079v-.008a.079.079 0 01.079-.079h.008z" /></svg>
+        Visuals & AI Options
+      </h3>
+      <div>
+        <label for="logo-upload-trigger" class="file-upload-label-styled">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="btn-icon"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" /></svg>
+          {{ selectedLogoFile?.name || 'Upload Report Logo (Optional)' }}
+          <input id="logo-upload-trigger" type="file" (change)="onLogoFileSelected($event)" accept="image/png, image/jpeg, image/jpg" class="visually-hidden">
+        </label>
+        <button *ngIf="selectedLogoFile" type="button" (click)="clearLogoFile()" class="clear-file-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="btn-icon"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+            Clear Logo
+        </button>
+      </div>
+
+      <div>
+        <label for="colorHex">Primary Report Color</label>
+        <div class="color-input-group">
+          <input id="colorHex" type="color" formControlName="colorHex" (input)="onColorHexChange($event)">
+          <input type="text" formControlName="colorRgb" class="color-rgb-input" placeholder="e.g., 106, 90, 205" (input)="onColorRgbChange($event)">
+        </div>
+        <div *ngIf="reportForm.get('colorRgb')?.invalid && reportForm.get('colorRgb')?.touched" class="field-error-message" @fadeInOut> Invalid RGB format. Use three numbers (0-255) separated by commas. </div>
+      </div>
+      <div class="checkbox-group">
+        <input id="no_rag" type="checkbox" formControlName="no_rag">
+        <label for="no_rag" class="checkbox-label">Disable RAG (Use LLM's general knowledge only)</label>
+      </div>
+    </section>
+
+    <div class="submit-section">
+      <button type="submit" [disabled]="isLoading || reportForm.invalid" class="submit-btn-glow">
+        <span *ngIf="!isLoading" class="submit-btn-text">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="btn-icon larger">
+            <path fill-rule="evenodd" d="M12.962 2.016a.75.75 0 00-1.062 0c-1.307 1.307-2.807 3.268-4.013 5.686C6.781 9.975 6 11.936 6 13.919c0 1.982.781 3.943 1.888 5.247 1.105 1.303 2.363 2.557 3.585 3.859a.75.75 0 001.054 0c1.222-1.302 2.479-2.556 3.585-3.859 1.106-1.304 1.888-3.265 1.888-5.247 0-1.983-.781-3.944-1.888-5.248-1.205-2.417-2.706-4.378-4.013-5.685zM10.5 7.5a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm3.065 5.26a.75.75 0 00-1.13 0L12 13.232l-.435-.472a.75.75 0 10-1.13 1.004l1 1.083a.75.75 0 001.13 0l1-1.083a.75.75 0 000-1.004z" clip-rule="evenodd" />
+          </svg>
+          Generate My Report!
+        </span>
+      </button>
+    </div>
+    <div *ngIf="successMessage && !isLoading" class="message success-message" @fadeInOut> {{ successMessage }} </div>
+    <div *ngIf="errorMessage && !isLoading" class="message error-message" @fadeInOut> {{ errorMessage }} </div>
+  </form>
+</div>
+
+<div class="loading-overlay" *ngIf="isLoading" @fadeInOut>
+  <div class="loading-modal" @fadeInOut>
+    <app-loading-spinner class="modal-spinner"></app-loading-spinner>
+    <h3>
+      <svg *ngIf="currentProgressStep.svgIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="modal-title-icon">
+        <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="currentProgressStep.svgIcon" />
+      </svg>
+      Crafting Your Report...
+    </h3>
+    <div class="progress-message-container">
+        <p class="progress-message" @loadingMessageAnimation>
+          <svg *ngIf="currentProgressStep.svgIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="message-icon">
+            <path stroke-linecap="round" stroke-linejoin="round" [attr.d]="currentProgressStep.svgIcon" />
+          </svg>
+          {{ currentProgressStep.message }}
+        </p>
+    </div>
+    <div class="progress-bar-container" *ngIf="currentProgressIndex < (reportForm.value.no_rag ? baseProgressSteps.length : (baseProgressSteps.length + 1)) -1">
+      <div class="progress-bar" [style.width.%]="(currentProgressIndex + 1) / (reportForm.value.no_rag ? baseProgressSteps.length : baseProgressSteps.length + 1) * 100">
+      </div>
+    </div>
+    <div class="tip">
+      <strong>Pro Tip:</strong> The more specific your query, the more tailored your AI-generated report will be!
+    </div>
+  </div>
+</div>

@@ -1,0 +1,32 @@
+<svg class="constellation-svg" [attr.width]="svgWidth" [attr.height]="svgHeight">
+  <defs>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3.5" result="coloredBlur"></feGaussianBlur>
+      <feMerge>
+        <feMergeNode in="coloredBlur"></feMergeNode>
+        <feMergeNode in="SourceGraphic"></feMergeNode>
+      </feMerge>
+    </filter>
+    <radialGradient id="pointGlow">
+      <stop offset="0%" [attr.stop-color]="'rgba(var(--secondary-accent-rgb), 0.8)'" />
+      <stop offset="100%" [attr.stop-color]="'rgba(var(--secondary-accent-rgb), 0)'" />
+    </radialGradient>
+  </defs>
+
+  <g class="lines-group">
+    <line
+      *ngFor="let line of lines; trackBy: trackByLineId"
+      class="constellation-line"
+      [@lineAnimation]="line.state"
+      [attr.x1]="line.p1.x" [attr.y1]="line.p1.y"
+      [attr.x2]="line.p2.x" [attr.y2]="line.p2.y">
+    </line>
+  </g>
+
+  <g class="points-group">
+    <g *ngFor="let point of points; trackBy: trackByPointId" [attr.transform]="'translate(' + point.x + ',' + point.y + ')'">
+      <circle class="constellation-point-glow" r="10" cx="0" cy="0"></circle>
+      <circle class="constellation-point" r="2" cx="0" cy="0"></circle>
+    </g>
+  </g>
+</svg>

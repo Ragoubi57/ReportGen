@@ -1,0 +1,32 @@
+:host {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+  background-color: var(--neutral-bg);
+}
+
+.constellation-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.constellation-line {
+  stroke: rgba(var(--secondary-accent-rgb), 0.3);
+  stroke-width: 1px;
+  filter: url(#glow);
+}
+
+.constellation-point {
+  fill: rgba(var(--secondary-accent-rgb), 0.8);
+}
+
+.constellation-point-glow {
+  fill: url(#pointGlow);
+  filter: url(#glow);
+}

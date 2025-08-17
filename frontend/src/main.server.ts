@@ -1,0 +1,8 @@
+// frontend/src/main.server.ts
+import { bootstrapApplication } from '@angular/platform-browser';
+import { AppComponent } from './app/app.component';
+import { config } from './app/app.config.server'; // This now correctly points to the merged server config
+
+const bootstrap = () => bootstrapApplication(AppComponent, config);
+
+export default bootstrap;
