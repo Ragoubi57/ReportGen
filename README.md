@@ -4,6 +4,10 @@
 
 ReportGen AI is a full-stack web application that leverages a multi-agent backend system to automatically generate professional, publication-quality reports in PDF format from a simple user prompt. It combines the power of Google's Gemini LLM, Retrieval-Augmented Generation (RAG) with ChromaDB, and a robust LaTeX compilation pipeline.
 
+### System Workflow
+
+![Screenshot](system_workflow_diagram.png)
+
 ### Key Features
 
 *   **Multi-Agent System:** The backend orchestrates specialized Python agents for each stage of report creation: Table of Contents, Cover Page, Main Content, Bibliography, and Appendices.
