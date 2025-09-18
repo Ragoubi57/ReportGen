@@ -137,8 +137,7 @@ Follow these instructions to get a local copy up and running for development and
 * The loading spinner component in the frontend is still static and not synced with the backend although it doesn't affect the project's
 performance by any means.
 * The figures feature in the report is still being implemented in progress. As for now there is only the possibility to upload one single figure that is always put before the first section of the report regardless but i will make the feature better and more robust in the  future.
-* I've tried to make the latex overall compilation to be as robust as possible. But when running this project with different prompts you may run into different kinds of errors in compilation .
-```
+* I've tried to make the latex overall compilation to be as robust as possible. But when running this project with different prompts you may run into different kinds of errors in compilation.
 
 
 
