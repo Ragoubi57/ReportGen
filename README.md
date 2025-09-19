@@ -1,94 +1,143 @@
-# ReportGen: AI-Powered LaTeX Report Generator
+# ReportGen AI: An AI-Powered LaTeX Report Generator
 
-ReportGen is a powerful tool that leverages Large Language Models (LLMs) like Google's Gemini API and Retrieval Augmented Generation (RAG) to automatically generate professional LaTeX reports from user queries. It features a user-friendly Angular frontend and a robust FastAPI backend.
+![Screenshot](screenshot.png)
 
-## Features
+ReportGen AI is a full-stack web application that leverages a multi-agent backend system to automatically generate professional, publication-quality reports in PDF format from a simple user prompt. It combines the power of Google's Gemini LLM, Retrieval-Augmented Generation (RAG) with ChromaDB, and a robust LaTeX compilation pipeline.
 
-*   **AI-Powered Content Generation:** Uses Gemini API for generating report sections (Introduction, Main Content, Conclusion, Bibliography, Appendices).
-*   **Retrieval Augmented Generation (RAG):** Enhances factual accuracy by retrieving relevant information from a knowledge base (powered by ChromaDB and Sentence Transformers).
-*   **LaTeX Output:** Produces high-quality, professional `.tex` documents.
-*   **PDF Compilation:** Includes functionality to compile the generated `.tex` file into a PDF using MiKTeX (or another LaTeX distribution).
-*   **Customizable Reports:** Users can specify title, authors, mentors, university, date, primary color, and an optional logo.
-*   **User-Uploaded Figures:** Allows users to upload a figure and caption to be included in the report.
-*   **Multi-Agent Architecture:** Modular design with specialized agents for different parts of the report (TOC, Cover, Main Content, etc.).
-*   **Modern Tech Stack:**
-    *   **Frontend:** Angular
-    *   **Backend:** FastAPI (Python)
-    *   **LLM:** Google Gemini API
-    *   **Vector Database (RAG):** ChromaDB
-    *   **Embeddings (RAG):** Sentence Transformers
-    *   **LaTeX Distribution (for compilation):** MiKTeX (or similar like TeX Live)
+### System Workflow
 
-## Getting Started
+![Screenshot](system_workflow_diagram.png)
 
-### Prerequisites
+### Key Features
 
-*   Python 3.9+
-*   Node.js and npm (for Angular frontend)
-*   A LaTeX distribution installed (e.g., MiKTeX for Windows, TeX Live for Linux/macOS) and `pdflatex` added to your system's PATH.
-*   A Google Gemini API Key.
+*   **Multi-Agent System:** The backend orchestrates specialized Python agents for each stage of report creation: Table of Contents, Cover Page, Main Content, Bibliography, and Appendices.
+*   **RAG-Powered Content:** Integrates with a local vector store to provide contextually relevant and accurate information, grounding the LLM's output.
+*   **Dynamic LaTeX Generation:** Generates clean, modular `.tex` files on the fly and compiles them into a final PDF using a local MiKTeX distribution.
+*   **Customizable Output:** Users can specify report titles, authors, mentors, and even upload a university/company logo and a primary color for a personalized theme.
+*   **Modern Frontend:** A sleek, responsive user interface built with the latest standalone components in Angular.
 
-### Backend Setup
+---
+
+### Technology Stack
+
+| Area      | Technology                                                                                                                                                                                               |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Frontend**  | ![Angular](https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white) ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white) ![SCSS](https://img.shields.io/badge/SCSS-CC6699?style=for-the-badge&logo=sass&logoColor=white) |
+| **Backend**   | ![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white) ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=fastapi&logoColor=white)                                                                                                                  |
+| **AI Engine** | ![Google Gemini](https://img.shields.io/badge/Google_Gemini-8E75B1?style=for-the-badge&logo=google&logoColor=white) ![ChromaDB](https://img.shields.io/badge/ChromaDB-5B327C?style=for-the-badge) ![SentenceTransformers](https://img.shields.io/badge/Sentence_Transformers-2E86C1?style=for-the-badge)          |
+| **Compilation** | ![LaTeX](https://img.shields.io/badge/LaTeX-008080?style=for-the-badge&logo=latex&logoColor=white) (via MiKTeX)                                                                                                                |
+
+---
+
+### Getting Started
+
+Follow these instructions to get a local copy up and running for development and testing purposes.
+
+#### Prerequisites
+*   Python 3.10+
+*   Node.js and npm
+*   Angular v17.3.17
+*   A local LaTeX distribution (e.g., [MiKTeX](https://miktex.org/download) for Windows, MacTeX for macOS, TeX Live for Linux).
+    *   **Important:** Ensure the `pdflatex` command is available in your system's PATH.
+
+#### Backend Setup
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/YOUR_USERNAME/ReportGen.git
+    git clone https://github.com/Ragoubi57/ReportGen.git
     cd ReportGen/backend
     ```
-2.  **Create a virtual environment (recommended):**
+
+2.  **Create and activate a virtual environment:**
     ```bash
+    # For Windows
     python -m venv venv
-    source venv/bin/activate  # On Windows: venv\Scripts\activate
+    .\venv\Scripts\activate
+
+    # For macOS/Linux
+    python3 -m venv venv
+    source venv/bin/activate
     ```
+
 3.  **Install Python dependencies:**
     ```bash
     pip install -r requirements.txt
     ```
-    *(You'll need to create a `requirements.txt` file - see below)*
-4.  **Set up environment variables:**
-    Create a `.env` file in the `backend/` directory (this file is ignored by Git):
-    ```env
-    GEMINI_API_KEY="YOUR_GEMINI_API_KEY_HERE"
-    # Optional: If your RAG PDF folder or ChromaDB path is different from defaults
-    # PDF_FOLDER="data/your_pdfs"
-    # CHROMA_DB_PATH="custom_embeddings_db"
-    ```
-5.  **Run the RAG data ingestion script (if you have one):**
-    *(Describe how to ingest data for RAG if applicable, e.g., `python src/ingest_data.py`)*
-6.  **Start the FastAPI server:**
+
+4.  **Set up your API Key:**
+    *   Create a file named `.env` in the `backend/` directory.
+    *   Add your Google Gemini API key to it:
+        ```
+        GEMINI_API_KEY="your_secret_api_key"
+        ```
+
+5.  **Create the Vector Store:**
+    *   Add your source documents (e.g., `.txt` or `.pdf` files) to the `backend/data` directory.
+    *   Run the ingestion script to create the local embeddings:
+        ```bash
+        python src/ingest_data.py 
+        ```
+    *   *(Note: The ingestion script is a placeholder; you should provide the one you used to generate your `embeddings` folder).*
+
+6.  **Run the FastAPI server:**
     ```bash
     uvicorn main_api:app --host 0.0.0.0 --port 5000 --reload
     ```
+    The backend API will be running at `http://localhost:5000`.
 
-### Frontend Setup
+#### Frontend Setup
 
 1.  **Navigate to the frontend directory:**
     ```bash
-    cd ../frontend 
+    # From the root directory
+    cd frontend
     ```
-    (Assuming you are in `ReportGen/backend` from previous step, otherwise `cd ReportGen/frontend`)
-2.  **Install Node.js dependencies:**
+
+2.  **Install npm packages:**
     ```bash
     npm install
     ```
+
 3.  **Run the Angular development server:**
     ```bash
     ng serve
     ```
-    The application will be accessible at `http://localhost:4200`.
+    The frontend will be available at `http://localhost:4200`.
 
-## Usage
+---
 
-1.  Ensure both the backend and frontend servers are running.
-2.  Open your browser and navigate to `http://localhost:4200`.
-3.  Fill in the report details in the form:
-    *   Report Title
-    *   Topic/Description (This is the main prompt for the AI)
-    *   Authors, Mentors, Date, University
-    *   Upload an optional logo.
-    *   Upload an optional figure and provide a caption.
-    *   Choose a primary color for the report.
-    *   Optionally disable RAG.
-4.  Click "Generate My Report!".
-5.  The generated PDF (or `.tex` file if PDF compilation fails) will be downloaded by your browser.
- 
+### Project Structure
+
+```
+.
+├── backend/
+│   ├── src/
+│   |   ├── embeddings/       # My own Generated vector embeddings(you can use your own data and make a chromadb vector database yourself)
+│   │   ├── cover.py          # Agent for cover page
+│   │   ├── generator.py      # Wrapper for Gemini API calls
+│   │   ├── latex_utils.py    # Centralized text processing & escaping
+│   │   ├── main_content.py   # Agent for report body
+│   │   ├── orchestrator.py   # Main controller for the agent workflow
+│   │   ├── retriever.py      # RAG logic
+│   │   ├── supplementary.py  # Agent for bibliography & appendices
+│   │   └── toc.py            # Agent for table of contents
+│   ├── main_api.py           # FastAPI application entry point
+│   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   │   └── ...
+│   ├── angular.json
+│   └── package.json
+└── README.md
+---
+```
+
+### Important Remarks:
+* This project was pushed with my own vector embeddings that i made with a certain dataset of mine. You have to use your own dataset and make your own embeddings with chromadb in order to use RAG efficiently. Although , the project works fine without RAG if you want that option.
+* The loading spinner component in the frontend is still static and not synced with the backend although it doesn't affect the project's
+performance by any means.
+* The figures feature in the report is still being implemented in progress. As for now there is only the possibility to upload one single figure that is always put before the first section of the report regardless but i will make the feature better and more robust in the  future.
+* I've tried to make the latex overall compilation to be as robust as possible. But when running this project with different prompts you may run into different kinds of errors in compilation.
+
+
+
