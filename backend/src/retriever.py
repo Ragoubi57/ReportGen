@@ -7,7 +7,7 @@ from typing import List, Optional
 from sentence_transformers import SentenceTransformer
 
 # Configure logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 
 # Define a fallback retriever function for when dependencies are not available
 def retrieve_chunks(query: str, k: int = 5) -> List[str]:

@@ -5,7 +5,7 @@ import time
 import google.generativeai as genai
 from google.api_core import exceptions as google_exceptions
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 
 try:
     api_key = os.getenv("GOOGLE_API_KEY")

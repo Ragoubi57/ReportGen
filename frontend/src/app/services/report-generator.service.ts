@@ -9,7 +9,7 @@ import { ReportRequest } from '../models/report-request.model';
   providedIn: 'root'
 })
 export class ReportGeneratorService {
-  private apiUrl = 'http://localhost:5000/generate-report'; // Ensure this is your correct backend URL
+  private apiUrl = 'http://localhost:8000/generate-report'; // Ensure this is your correct backend URL
 
   constructor(private http: HttpClient) { }
 

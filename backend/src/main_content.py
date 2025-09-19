@@ -1,10 +1,9 @@
-# backend/src/main_content.py
 import logging
 import re
 from typing import List, Dict, Any, Optional
 from latex_utils import process_llm_output_for_latex, escape_latex_special_chars, clean_title_for_latex_command
 import time
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 
 def generate_section_content(section_title: str, full_query: str, from_generator_func) -> str:
     prompt = f"""You are an academic writer for a LaTeX report on: "{full_query}". Write the content for the section: "{section_title}".

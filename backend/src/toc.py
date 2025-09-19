@@ -1,12 +1,10 @@
 # src/toc.py
-
-import os
 import logging
 import json
 from typing import List, Dict, Any
 
 # Configure logging
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 
 def generate_toc( # This function is not strictly needed anymore as \tableofcontents is used.
     sections: List[Dict[str, Any]],
@@ -52,7 +50,7 @@ def generate_toc_from_query(query: str, from_generator_func=None) -> List[Dict[s
     
     **CRITICAL INSTRUCTIONS FOR TITLES:**
     - **TITLES MUST BE PLAIN TEXT STRINGS.**
-    - **DO NOT include any special characters like '{{', '}}', '/', '\', '%', '$', '#', '_', '^', '~', '<', '>' or other formatting/LaTeX commands directly in the title strings.** For example, a title should be "Introduction", NOT "{{Introduction}}", "Introduction {{Details}}", or "\section{{Introduction}}".
+    - **DO NOT include any special characters like '/', '\', '%', '$', '#', '_', '^', '~', '<', '>' or other formatting/LaTeX commands directly in the title strings.** For example, a title should be "Introduction", NOT "{{Introduction}}", "Introduction {{Details}}".
     - Keep titles concise and relevant to the report description.
     - Do not generate sections for "Abstract", "Acknowledgements", "References", or "Appendices" here; those are handled separately or automatically.
     

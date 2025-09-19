@@ -3,6 +3,7 @@ import logging
 import traceback
 import shutil
 from typing import List, Optional, Annotated # Make sure Annotated is here
+import colorlog
 
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException # Removed Depends as it's not used directly here
 from fastapi.responses import FileResponse
@@ -41,6 +42,23 @@ app.add_middleware(
 log_level_str = os.getenv("LOG_LEVEL", "INFO").upper()
 log_level = getattr(logging, log_level_str, logging.INFO)
 
+console_handler = colorlog.StreamHandler(sys.stdout)
+console_handler.setFormatter(colorlog.ColoredFormatter(
+    fmt='%(log_color)s%(asctime)s - %(name)s - %(levelname)s - [%(filename)s:%(lineno)d] - %(message)s',
+    log_colors={
+        'DEBUG':    'cyan',
+        'INFO':     'green',
+        'WARNING':  'yellow',
+        'ERROR':    'red',
+        'CRITICAL': 'bold_red',
+    }
+))
+
+file_handler = logging.FileHandler("api_report_generator.log", mode='w')
+file_handler.setFormatter(logging.Formatter(
+    fmt='%(asctime)s - %(name)s - %(levelname)s - [%(filename)s:%(lineno)d] - %(message)s'
+))
+
 logging.basicConfig(
     level=log_level,
     format='%(asctime)s - %(name)s - %(levelname)s - [%(filename)s:%(lineno)d] - %(message)s',
@@ -49,7 +67,11 @@ logging.basicConfig(
         logging.FileHandler("api_report_generator.log", mode='w')
     ]
 )
+
 logger = logging.getLogger(__name__)
+logger.setLevel(log_level)
+logger.addHandler(console_handler)
+logger.addHandler(file_handler)
 
 REPORTS_OUTPUT_DIR = os.path.join(os.path.dirname(__file__), "build")
 API_TEMP_UPLOADS_DIR = os.path.join(REPORTS_OUTPUT_DIR, "api_temp_uploads")

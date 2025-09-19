@@ -5,7 +5,7 @@ import logging
 from typing import List, Optional
 from latex_utils import escape_latex_special_chars
 
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
 
 def generate_cover_page(
     report_title: str,
